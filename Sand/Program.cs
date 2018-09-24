@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sand
 {
 	class Program
 	{
 		static void Main(string[] args)
+		{
+			//Test1();
+		}
+
+		static void Test1()
 		{
 			var matrix = GetTestMatrix();
 
