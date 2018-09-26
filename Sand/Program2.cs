@@ -1,28 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sand
 {
-	class Program2
+	public class Program2
 	{
 		//First number is height, second number is max height
-		private readonly Tuple<int, int>[,] sand = new Tuple<int, int>[Size,Size];
-		private const int Size = 100;
+		private static readonly SandColumn[,] m_sand = new SandColumn[Size,Size];
+		private const int Size = 3;
 
-		public void Test2()
+		public static void Test2()
 		{
 			for (int i = 0; i < Size; i++)
 			{
 				for (int j = 0; j < Size; j++)
 				{
-					sand[i, j] = new Tuple<int, int>(50, Int32.MaxValue);
+					m_sand[i, j] = new SandColumn{HeightLimit = 10, Height = 20};
 				}
 			}
 
+			m_sand[1, 1] = new SandColumn { HeightLimit = 10, Height = 70 };
 
+			SettleColumn(m_sand, 1, 1);
+		}
+
+		private static bool SettleColumn(SandColumn[,] sand, int x, int y)
+		{
+			var columnChanged = false;
+
+			var column = sand[x, y];
+
+			var neighbours = new List<SandColumn>();
+
+			if (x-1 >= 0)
+			{
+				neighbours.Add(sand[x-1, y]);
+			}
+			if (x+1 < sand.GetLength(0))
+			{
+				neighbours.Add(sand[x+1, y]);
+			}
+			if (y-1 >= 0)
+			{
+				neighbours.Add(sand[x, y-1]);
+			}
+			if (y+1 < sand.GetLength(1))
+			{
+				neighbours.Add(sand[x, y+1]);
+			}
+
+			while (column.Pressure > neighbours.Min(n => n.IncreasedPressure))
+			{
+				SandColumn lowestPressureNeighbour = null;
+				foreach (var neighbour in neighbours)
+				{
+
+					//if we could send sand to neighbour, and it's the lowest pressure neighbour we've seen so far, save it
+					if (column.Pressure > neighbour.IncreasedPressure &&
+					    (lowestPressureNeighbour == null ||
+					     neighbour.IncreasedPressure < lowestPressureNeighbour.IncreasedPressure))
+					{
+						lowestPressureNeighbour = neighbour;
+					}
+				}
+
+				if (lowestPressureNeighbour == null)
+				{
+					throw new Exception("lowestPressureNeighbour shouldn't be null");
+				}
+
+				column.Height--;
+				lowestPressureNeighbour.Height++;
+				columnChanged = true;
+			}
+
+			//At this point, remove columns that have too high pressure to move more sand into
+			//then look at how gravity would move sand.
+
+			return columnChanged;
 		}
 
 		//Applies gravity to the sand.
@@ -32,25 +88,10 @@ namespace Sand
 			var highSand = new List<Tuple<int, int>>();
 			foreach (var tuple in sand)
 			{
-				//Look at all "unfilled" lower neighbours. Pick one that's lowest. Random tie breaker
+				//Look at all "unfilled" lowest neighbours. Random tie breaker
 				//else, if column is compressed, move particle to neighbour with lowest "compression".
 			}
 		}
 
-
-
-		private void Displace(Tuple<int, int>[,] sand)
-		{
-			//coordinates of sand that's too high
-			var highSand = new List<Tuple<int, int>>();
-			foreach (var tuple in sand)
-			{
-
-			}
-		}
-
 	}
-
-
-
 }

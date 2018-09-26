@@ -10,6 +10,8 @@ namespace Sand
 		static void Main(string[] args)
 		{
 			//Test1();
+			Program2.Test2();
+			Console.ReadLine();
 		}
 
 		static void Test1()
@@ -30,8 +32,6 @@ namespace Sand
 				}
 				Console.WriteLine();
 			}
-
-			Console.ReadLine();
 		}
 
 		static void Poke(int[,] sand, Point coords)
