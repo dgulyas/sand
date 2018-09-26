@@ -75,8 +75,10 @@ namespace Sand
 				columnChanged = true;
 			}
 
-			//At this point, remove columns that have too high pressure to move more sand into
-			//then look at how gravity would move sand.
+			//Need to look at sand height if lowest pressure is zero.
+			//Can't start moving sand into into other columns now, because
+			//that lowers pressure in this column, maning that it shouldn't
+			//have been moved into the last neighbour.
 
 			return columnChanged;
 		}
