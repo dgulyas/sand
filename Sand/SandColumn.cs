@@ -9,6 +9,10 @@
 
 		//what would be the new pressure if a level of sand was added?
 		public float IncreasedPressure => Height + 1 <= HeightLimit ? 0 : (((float)Height + 1) / (float)HeightLimit) - 1;
+		public float DecreasedPressure => Height - 1 <= HeightLimit ? 0 : (((float)Height - 1) / (float)HeightLimit) - 1;
+
+		public int IncreasedHeight => Height + 1;
+		public int DecreasedHeight => Height - 1;
 
 		public override string ToString()
 		{
