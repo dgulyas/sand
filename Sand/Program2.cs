@@ -6,7 +6,6 @@ namespace Sand
 {
 	public class Program2
 	{
-		//First number is height, second number is max height
 		private static readonly SandColumn[,] m_sand = new SandColumn[Size,Size];
 		private const int Size = 3;
 		private static readonly Random Rnd = new Random();
@@ -21,69 +20,44 @@ namespace Sand
 				}
 			}
 
-			m_sand[1, 1] = new SandColumn { HeightLimit = 10, Height = 70 };
+			m_sand[1, 1] = new SandColumn { HeightLimit = 10, Height = 92 };
 
-			SettleColumn2(m_sand, new Point{X = 1, Y = 1});
+            PrintMapHeights(m_sand);
+            Console.WriteLine();
+
+            while (SettleMap(m_sand))
+            {
+                PrintMapHeights(m_sand);
+                Console.WriteLine();
+            }
+            Console.ReadLine();
 		}
 
-		//private static bool SettleColumn(SandColumn[,] sand, int x, int y)
-		//{
-		//	var columnChanged = false;
+        private static bool SettleMap(SandColumn[,] sand)
+        {
+            var sandMoved = false;
+            for(int x = 0; x < sand.GetLength(0); x++)
+            {
+                for(int y = 0; y < sand.GetLength(1); y++)
+                {
+                    var columnSandMoved = SettleColumn(sand, new Point { X = x, Y = y });
+                    if (columnSandMoved)
+                    {
+                        sandMoved = true;
+                    }
+                }
+            }
+            return sandMoved;
+        }
 
-		//	var column = sand[x, y];
-
-		//	var neighbours = new List<SandColumn>();
-
-		//	if (x-1 >= 0)
-		//	{
-		//		neighbours.Add(sand[x-1, y]);
-		//	}
-		//	if (x+1 < sand.GetLength(0))
-		//	{
-		//		neighbours.Add(sand[x+1, y]);
-		//	}
-		//	if (y-1 >= 0)
-		//	{
-		//		neighbours.Add(sand[x, y-1]);
-		//	}
-		//	if (y+1 < sand.GetLength(1))
-		//	{
-		//		neighbours.Add(sand[x, y+1]);
-		//	}
-
-		//	while (column.Pressure > neighbours.Min(n => n.IncreasedPressure))
-		//	{
-		//		SandColumn lowestPressureNeighbour = null;
-		//		foreach (var neighbour in neighbours)
-		//		{
-
-		//			//if we could send sand to neighbour, and it's the lowest pressure neighbour we've seen so far, save it
-		//			if (column.Pressure > neighbour.IncreasedPressure &&
-		//			    (lowestPressureNeighbour == null ||
-		//			     neighbour.IncreasedPressure < lowestPressureNeighbour.IncreasedPressure))
-		//			{
-		//				lowestPressureNeighbour = neighbour;
-		//			}
-		//		}
-
-		//		if (lowestPressureNeighbour == null)
-		//		{
-		//			throw new Exception("lowestPressureNeighbour shouldn't be null");
-		//		}
-
-		//		column.Height--;
-		//		lowestPressureNeighbour.Height++;
-		//		columnChanged = true;
-		//	}
-		//	return columnChanged;
-		//}
-
-		private static bool SettleColumn2(SandColumn[,] sand, Point location)
+        private static bool SettleColumn(SandColumn[,] sand, Point location)
 		{
 			var column = sand[location.X, location.Y];
 			var neighbours = GetNeighbours(sand, location);
 
-			bool columnChanged;
+            var columnChangedOnce = false; //if the column changed at all
+
+			bool columnChanged; //if the column changed in this iteration
 			do
 			{
 				columnChanged = false;
@@ -127,40 +101,11 @@ namespace Sand
 					columnChanged = true;
 				}
 
+                columnChangedOnce = columnChanged == true ? true : columnChangedOnce;
+
 			} while (columnChanged);
 
-
-			//while (column.Pressure > neighbours.Min(n => n.IncreasedPressure))
-			//{
-			//	SandColumn lowestPressureNeighbour = null;
-			//	foreach (var neighbour in neighbours)
-			//	{
-
-			//		//if we could send sand to neighbour, and it's the lowest pressure neighbour we've seen so far, save it
-			//		if (column.Pressure > neighbour.IncreasedPressure &&
-			//		    (lowestPressureNeighbour == null ||
-			//		     neighbour.IncreasedPressure < lowestPressureNeighbour.IncreasedPressure))
-			//		{
-			//			lowestPressureNeighbour = neighbour;
-			//		}
-			//	}
-
-			//	if (lowestPressureNeighbour == null)
-			//	{
-			//		throw new Exception("lowestPressureNeighbour shouldn't be null");
-			//	}
-
-			//	column.Height--;
-			//	lowestPressureNeighbour.Height++;
-			//	columnChanged = true;
-			//}
-
-			//Need to look at sand height if lowest pressure is zero.
-			//Can't start moving sand into into other columns now, because
-			//that lowers pressure in this column, maning that it shouldn't
-			//have been moved into the last neighbour.
-
-			return columnChanged;
+			return columnChangedOnce;
 		}
 
 		private static void MoveSand(SandColumn source, SandColumn dest)
@@ -195,17 +140,18 @@ namespace Sand
 			return neighbours;
 		}
 
-		//Applies gravity to the sand.
-		private void SettleMap(Tuple<int, int>[,] sand)
-		{
-			//coordinates of sand that's too high
-			var highSand = new List<Tuple<int, int>>();
-			foreach (var tuple in sand)
-			{
-				//Look at all "unfilled" lowest neighbours. Random tie breaker
-				//else, if column is compressed, move particle to neighbour with lowest "compression".
-			}
-		}
+        private static void PrintMapHeights(SandColumn[,] sand)
+        {
+            for (int x = 0; x < sand.GetLength(0); x++)
+            {
+                for (int y = 0; y < sand.GetLength(1); y++)
+                {
+                    Console.Write(sand[x,y].Height);
+                    Console.Write(" ");
+                }
+                Console.WriteLine();
+            }
+        }
 
 	}
 }
