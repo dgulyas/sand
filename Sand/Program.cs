@@ -10,7 +10,7 @@ namespace Sand
 		static void Main(string[] args)
 		{
 			//Test1();
-			Program2.Test2();
+			SandTable.Test2();
 			Console.ReadLine();
 		}
 

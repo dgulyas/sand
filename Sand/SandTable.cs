@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace Sand
 {
-	public class Program2
+	public class SandTable
 	{
 		private static readonly SandColumn[,] m_sand = new SandColumn[Size,Size];
-		private const int Size = 3;
+		private const int Size = 100;
 		private static readonly Random Rnd = new Random();
 
 		public static void Test2()
@@ -22,14 +22,12 @@ namespace Sand
 
 			m_sand[1, 1] = new SandColumn { HeightLimit = 10, Height = 92 };
 
-            PrintMapHeights(m_sand);
-            Console.WriteLine();
-
             while (SettleMap(m_sand))
             {
-                PrintMapHeights(m_sand);
-                Console.WriteLine();
+                Console.WriteLine("a");
             }
+		    PrintMapHeights(m_sand);
+            SandToImageOutputter.SaveMatrixAsPng(m_sand, @"C:\Users\dgulyas\Desktop\out", "test.png");
             Console.ReadLine();
 		}
 
@@ -101,7 +99,7 @@ namespace Sand
 					columnChanged = true;
 				}
 
-                columnChangedOnce = columnChanged == true ? true : columnChangedOnce;
+                columnChangedOnce = columnChanged || columnChangedOnce;
 
 			} while (columnChanged);
 
