@@ -20,40 +20,40 @@ namespace Sand
 				}
 			}
 
-			m_sand[1, 1] = new SandColumn { HeightLimit = 10, Height = 92 };
+			m_sand[25, 25] = new SandColumn { HeightLimit = 10, Height = 500 };
 
-            while (SettleMap(m_sand))
-            {
-                Console.WriteLine("a");
-            }
-		    PrintMapHeights(m_sand);
-            SandToImageOutputter.SaveMatrixAsPng(m_sand, @"C:\Users\dgulyas\Desktop\out", "test.png");
-            Console.ReadLine();
+			while (SettleMap(m_sand))
+			{
+				Console.WriteLine("a");
+			}
+			//PrintMapHeights(m_sand);
+			SandToImageOutputter.SaveMatrixAsPng(m_sand, @"C:\Users\dgulyas\Desktop\out", "test.png");
+			Console.ReadLine();
 		}
 
-        private static bool SettleMap(SandColumn[,] sand)
-        {
-            var sandMoved = false;
-            for(int x = 0; x < sand.GetLength(0); x++)
-            {
-                for(int y = 0; y < sand.GetLength(1); y++)
-                {
-                    var columnSandMoved = SettleColumn(sand, new Point { X = x, Y = y });
-                    if (columnSandMoved)
-                    {
-                        sandMoved = true;
-                    }
-                }
-            }
-            return sandMoved;
-        }
+		private static bool SettleMap(SandColumn[,] sand)
+		{
+			var sandMoved = false;
+			for(int x = 0; x < sand.GetLength(0); x++)
+			{
+				for(int y = 0; y < sand.GetLength(1); y++)
+				{
+					var columnSandMoved = SettleColumn(sand, new Point { X = x, Y = y });
+					if (columnSandMoved)
+					{
+						sandMoved = true;
+					}
+				}
+			}
+			return sandMoved;
+		}
 
-        private static bool SettleColumn(SandColumn[,] sand, Point location)
+		private static bool SettleColumn(SandColumn[,] sand, Point location)
 		{
 			var column = sand[location.X, location.Y];
 			var neighbours = GetNeighbours(sand, location);
 
-            var columnChangedOnce = false; //if the column changed at all
+			var columnChangedOnce = false; //if the column changed at all
 
 			bool columnChanged; //if the column changed in this iteration
 			do
@@ -99,7 +99,7 @@ namespace Sand
 					columnChanged = true;
 				}
 
-                columnChangedOnce = columnChanged || columnChangedOnce;
+				columnChangedOnce = columnChanged || columnChangedOnce;
 
 			} while (columnChanged);
 
@@ -138,18 +138,18 @@ namespace Sand
 			return neighbours;
 		}
 
-        private static void PrintMapHeights(SandColumn[,] sand)
-        {
-            for (int x = 0; x < sand.GetLength(0); x++)
-            {
-                for (int y = 0; y < sand.GetLength(1); y++)
-                {
-                    Console.Write(sand[x,y].Height);
-                    Console.Write(" ");
-                }
-                Console.WriteLine();
-            }
-        }
+		private static void PrintMapHeights(SandColumn[,] sand)
+		{
+			for (int x = 0; x < sand.GetLength(0); x++)
+			{
+				for (int y = 0; y < sand.GetLength(1); y++)
+				{
+					Console.Write(sand[x,y].Height);
+					Console.Write(" ");
+				}
+				Console.WriteLine();
+			}
+		}
 
 	}
 }
