@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sand
+﻿namespace Sand
 {
 	public class Point
 	{
 		public int X;
 		public int Y;
+		public int Height;
+
+		public override string ToString()
+		{
+			return $"X:{X}, Y:{Y}, Height:{Height}";
+		}
 	}
 }

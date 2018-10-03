@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HeigthLimitPatternLibrary.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SandTable.cs" />
@@ -52,7 +53,9 @@
     <Compile Include="SandToImageOutputter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

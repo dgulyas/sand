@@ -10,7 +10,7 @@ namespace Sand
 	{
 		//origin of the matrix is in the upper right
 		//matrix coords are in [x,y] order
-		public static void SaveMatrixAsPng(SandColumn[,] sand, string outputFolder, string bmpName)
+		public static void SaveMatrixAsImage(SandColumn[,] sand, string outputFolder, string bmpName)
 		{
 			var matrixWidth = sand.GetLength(0);
 			var matrixHeight = sand.GetLength(1);
@@ -34,7 +34,7 @@ namespace Sand
 			{
 				for (int y = 0; y < matrixHeight; y++)
 				{
-					var alpha = heightArray[x,y];
+					var alpha = heightArray[x, y];
 					bitmap.SetPixel(x, y, Color.FromArgb(alpha, alpha, alpha));
 				}
 			}
@@ -86,9 +86,21 @@ namespace Sand
 			{
 				for (int y = 0; y < heightMatrix.GetLength(1); y++)
 				{
-					heightMatrix[x, y] = (int)((heightMatrix[x, y] - lowestHeight) * newRange / oldRange + minGreyScale);
+					if (Math.Abs(oldRange) < 0.001) //if the height matrix is all one height
+					{
+						heightMatrix[x, y] = 100;
+					}
+					else
+					{
+						//This moves a number from one range into another, so that all numbers are between 0-255, which is the range of
+						//greyscale for images.
+						//https://stackoverflow.com/questions/929103/convert-a-number-range-to-another-range-maintaining-ratio
+						heightMatrix[x, y] =
+							(int)((heightMatrix[x, y] - lowestHeight) * newRange / oldRange + minGreyScale);
+					}
 				}
 			}
+
 		}
 
 	}

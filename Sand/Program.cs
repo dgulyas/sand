@@ -11,7 +11,6 @@ namespace Sand
 		{
 			//Test1();
 			SandTable.Test2();
-			Console.ReadLine();
 		}
 
 		static void Test1()

@@ -6,8 +6,8 @@ namespace Sand
 {
 	public class SandTable
 	{
-		private static readonly SandColumn[,] m_sand = new SandColumn[Size,Size];
-		private const int Size = 100;
+		private const int Size = 5;
+		private static readonly SandColumn[,] Sand = new SandColumn[Size,Size];
 		private static readonly Random Rnd = new Random();
 
 		public static void Test2()
@@ -16,18 +16,20 @@ namespace Sand
 			{
 				for (int j = 0; j < Size; j++)
 				{
-					m_sand[i, j] = new SandColumn{HeightLimit = 10, Height = 20};
+					Sand[i, j] = new SandColumn{HeightLimit = int.MaxValue, Height = 20};
 				}
 			}
 
-			m_sand[25, 25] = new SandColumn { HeightLimit = 10, Height = 500 };
+			//m_sand[25, 25] = new SandColumn { HeightLimit = 10, Height = 500 };
 
-			while (SettleMap(m_sand))
+			//ApplyHeightLimitPattern(m_sand, HeigthLimitPatternLibrary.SmallCube, new Point{X=10, Y=10, Height = 10});
+
+			while (SettleMap(Sand))
 			{
 				Console.WriteLine("a");
 			}
 			//PrintMapHeights(m_sand);
-			SandToImageOutputter.SaveMatrixAsPng(m_sand, @"C:\Users\dgulyas\Desktop\out", "test.png");
+			SandToImageOutputter.SaveMatrixAsImage(Sand, @"C:\Users\dgulyas\Desktop\out", "test.png");
 			Console.ReadLine();
 		}
 
@@ -65,6 +67,9 @@ namespace Sand
 
 				foreach (var neighbour in neighbours)
 				{
+					//TODO: Fix this bug. If there's no maxHeight, this is true. What's wrong with the model?
+					//Can we just also test that IncreasedPressure is greater than 0? Because that means
+					//the two columns are under pressure.
 					if (column.DecreasedPressure >= neighbour.IncreasedPressure)
 					{
 						lowerPressureNeighbours.Add(neighbour);
@@ -73,6 +78,10 @@ namespace Sand
 					{
 						equalPressureLowerHeightNeighbours.Add(neighbour);
 					}
+					//TODO: What happens if the columns have equal pressure, but different heights?
+					//Does the second test need to also test that they aren't under pressure?
+					//Do we need to test at the start if there's pressure or not, and then test
+					//these secondary things?
 				}
 
 				if (lowerPressureNeighbours.Count > 0)
@@ -150,6 +159,38 @@ namespace Sand
 				Console.WriteLine();
 			}
 		}
+
+		private static void ClearHeightLimits(SandColumn[,] sand)
+		{
+			foreach (var sandColumn in sand)
+			{
+				sandColumn.HeightLimit = int.MaxValue;
+			}
+		}
+
+		/// <summary>
+		/// Starting from the origin point, sets the HeightLimit to be the offset in the pattern.
+		/// </summary>
+		/// <param name="sand">The sand field that the height limit pattern is applied to.</param>
+		/// <param name="pattern">A 2D matrix of height patterns</param>
+		/// <param name="origin">The point that the upper right (0,0) part of the pattern should be at</param>
+		private static void ApplyHeightLimitPattern(SandColumn[,] sand, int[,] pattern, Point origin)
+		{
+			for (int x = 0; x < pattern.GetLength(0); x++)
+			{
+				for (int y = 0; y < pattern.GetLength(1); y++)
+				{
+					var targetX = x + origin.X;
+					var targetY = y + origin.Y;
+					//if the point we want to modify is inside the bounds of sand
+					if (targetX >= 0 && targetX < sand.GetLength(0) && targetY >= 0 && targetY < sand.GetLength(1))
+					{
+						sand[targetX, targetY].HeightLimit = origin.Height + pattern[x, y];
+					}
+				}
+			}
+		}
+
 
 	}
 }
