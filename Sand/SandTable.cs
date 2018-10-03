@@ -6,7 +6,7 @@ namespace Sand
 {
 	public class SandTable
 	{
-		private const int Size = 5;
+		private const int Size = 50;
 		private static readonly SandColumn[,] Sand = new SandColumn[Size,Size];
 		private static readonly Random Rnd = new Random();
 
@@ -20,17 +20,21 @@ namespace Sand
 				}
 			}
 
-			//m_sand[25, 25] = new SandColumn { HeightLimit = 10, Height = 500 };
+			Sand[25, 25] = new SandColumn { HeightLimit = int.MaxValue, Height = 500 };
 
 			//ApplyHeightLimitPattern(m_sand, HeigthLimitPatternLibrary.SmallCube, new Point{X=10, Y=10, Height = 10});
+
+			int iteration = 0;
+			SandToImageOutputter.SaveMatrixAsImage(Sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
 
 			while (SettleMap(Sand))
 			{
 				Console.WriteLine("a");
+				SandToImageOutputter.SaveMatrixAsImage(Sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
 			}
 			//PrintMapHeights(m_sand);
-			SandToImageOutputter.SaveMatrixAsImage(Sand, @"C:\Users\dgulyas\Desktop\out", "test.png");
-			Console.ReadLine();
+			SandToImageOutputter.SaveMatrixAsImage(Sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration}.png");
+			//Console.ReadLine();
 		}
 
 		private static bool SettleMap(SandColumn[,] sand)
@@ -67,21 +71,14 @@ namespace Sand
 
 				foreach (var neighbour in neighbours)
 				{
-					//TODO: Fix this bug. If there's no maxHeight, this is true. What's wrong with the model?
-					//Can we just also test that IncreasedPressure is greater than 0? Because that means
-					//the two columns are under pressure.
-					if (column.DecreasedPressure >= neighbour.IncreasedPressure)
+					if (column.Pressure > 0 && column.DecreasedPressure >= neighbour.IncreasedPressure)
 					{
 						lowerPressureNeighbours.Add(neighbour);
 					}
-					else if (column.DecreasedHeight >= neighbour.IncreasedHeight)
+					else if (column.Pressure <= 0 && column.DecreasedHeight >= neighbour.IncreasedHeight)
 					{
 						equalPressureLowerHeightNeighbours.Add(neighbour);
 					}
-					//TODO: What happens if the columns have equal pressure, but different heights?
-					//Does the second test need to also test that they aren't under pressure?
-					//Do we need to test at the start if there's pressure or not, and then test
-					//these secondary things?
 				}
 
 				if (lowerPressureNeighbours.Count > 0)
