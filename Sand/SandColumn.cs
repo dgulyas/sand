@@ -1,9 +1,12 @@
-﻿namespace Sand
+﻿using System.Collections.Generic;
+
+namespace Sand
 {
 	public class SandColumn
 	{
 		public int Height;
 		public int HeightLimit;
+		public List<SandColumn> Neighbours;
 
 		public float Pressure => Height <= HeightLimit ? 0 : ((float)Height / (float)HeightLimit) - 1;
 

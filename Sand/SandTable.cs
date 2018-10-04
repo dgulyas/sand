@@ -6,35 +6,52 @@ namespace Sand
 {
 	public class SandTable
 	{
-		private const int Size = 50;
-		private static readonly SandColumn[,] Sand = new SandColumn[Size,Size];
+		private const int Size = 30;
 		private static readonly Random Rnd = new Random();
 
 		public static void Test2()
 		{
-			for (int i = 0; i < Size; i++)
+			var sand = CreateSandTable(Size, Size, 20);
+
+			//sand[25, 25] = new SandColumn { HeightLimit = int.MaxValue, Height = 500 };
+
+			ClearHeightLimits(sand);
+			ApplyHeightLimitPattern(sand, HeigthLimitPatternLibrary.SmallCube, new Point{X=10, Y=10, Height = 10});
+
+			//int iteration = 0;
+			//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
+
+			while (SettleMap(sand))
 			{
-				for (int j = 0; j < Size; j++)
+				Console.WriteLine("a");
+				//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
+			}
+			//PrintMapHeights(m_sand);
+			SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\", $"testE.png");
+			//Console.ReadLine();
+		}
+
+		private static SandColumn[,] CreateSandTable(int height, int width, int defaultSandHeight, int defaultHeightLimit = int.MaxValue)
+		{
+			var sand = new SandColumn[width,height];
+
+			for (int x = 0; x < width; x++)
+			{
+				for (int y = 0; y < height; y++)
 				{
-					Sand[i, j] = new SandColumn{HeightLimit = int.MaxValue, Height = 20};
+					sand[x, y] = new SandColumn { HeightLimit = defaultHeightLimit, Height = defaultSandHeight };
 				}
 			}
 
-			Sand[25, 25] = new SandColumn { HeightLimit = int.MaxValue, Height = 500 };
-
-			//ApplyHeightLimitPattern(m_sand, HeigthLimitPatternLibrary.SmallCube, new Point{X=10, Y=10, Height = 10});
-
-			int iteration = 0;
-			SandToImageOutputter.SaveMatrixAsImage(Sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
-
-			while (SettleMap(Sand))
+			for (int x = 0; x < width; x++)
 			{
-				Console.WriteLine("a");
-				SandToImageOutputter.SaveMatrixAsImage(Sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
+				for (int y = 0; y < height; y++)
+				{
+					sand[x, y].Neighbours = GetNeighbours(sand, new Point {X = x, Y = y});
+				}
 			}
-			//PrintMapHeights(m_sand);
-			SandToImageOutputter.SaveMatrixAsImage(Sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration}.png");
-			//Console.ReadLine();
+
+			return sand;
 		}
 
 		private static bool SettleMap(SandColumn[,] sand)
@@ -57,7 +74,6 @@ namespace Sand
 		private static bool SettleColumn(SandColumn[,] sand, Point location)
 		{
 			var column = sand[location.X, location.Y];
-			var neighbours = GetNeighbours(sand, location);
 
 			var columnChangedOnce = false; //if the column changed at all
 
@@ -69,13 +85,13 @@ namespace Sand
 				var lowerPressureNeighbours = new List<SandColumn>();
 				var equalPressureLowerHeightNeighbours = new List<SandColumn>();
 
-				foreach (var neighbour in neighbours)
+				foreach (var neighbour in column.Neighbours)
 				{
 					if (column.Pressure > 0 && column.DecreasedPressure >= neighbour.IncreasedPressure)
 					{
 						lowerPressureNeighbours.Add(neighbour);
 					}
-					else if (column.Pressure <= 0 && column.DecreasedHeight >= neighbour.IncreasedHeight)
+					else if (column.Pressure <= 0 && neighbour.Pressure <= 0 && column.DecreasedHeight >= neighbour.IncreasedHeight)
 					{
 						equalPressureLowerHeightNeighbours.Add(neighbour);
 					}
@@ -86,15 +102,7 @@ namespace Sand
 					var lowestPressure = lowerPressureNeighbours.Min(n => n.IncreasedPressure);
 					lowerPressureNeighbours.RemoveAll(n => n.Pressure > lowestPressure);
 
-					SandColumn chosenNeighbour;
-					if (lowerPressureNeighbours.Count == 1)
-					{
-						chosenNeighbour = lowerPressureNeighbours.First();
-					}
-					else
-					{
-						chosenNeighbour = lowerPressureNeighbours[Rnd.Next(lowerPressureNeighbours.Count)];
-					}
+					SandColumn chosenNeighbour = lowerPressureNeighbours[Rnd.Next(lowerPressureNeighbours.Count)];
 
 					MoveSand(column, chosenNeighbour);
 					columnChanged = true;
