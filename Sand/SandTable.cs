@@ -6,12 +6,12 @@ namespace Sand
 {
 	public class SandTable
 	{
-		private const int Size = 30;
+		private const int Size = 23;
 		private static readonly Random Rnd = new Random();
 
 		public static void Test2()
 		{
-			var sand = CreateSandTable(Size, Size, 20);
+			var sand = CreateSandTable(Size, Size, 15);
 
 			//sand[25, 25] = new SandColumn { HeightLimit = int.MaxValue, Height = 500 };
 
@@ -21,13 +21,15 @@ namespace Sand
 			//int iteration = 0;
 			//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
 
-			while (SettleMap(sand))
+			var iteration = 0;
+			while (SettleMap(sand) && iteration++ < 200)
 			{
-				Console.WriteLine("a");
+				Console.WriteLine(iteration);
 				//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
 			}
 			//PrintMapHeights(m_sand);
-			SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\", $"testE.png");
+			SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\david\Desktop\out\", $"testE.png");
+			SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\david\Desktop\out\", $"testE.obj");
 			//Console.ReadLine();
 		}
 

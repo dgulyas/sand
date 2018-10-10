@@ -6,7 +6,7 @@ using System.IO;
 namespace Sand
 {
 	//takes a matrix of SandColumns and outputs a png
-	public class SandToImageOutputter
+	public class SandToImageExporter
 	{
 		//origin of the matrix is in the upper right
 		//matrix coords are in [x,y] order
@@ -42,7 +42,7 @@ namespace Sand
 			bitmap.Save(Path.Combine(outputFolder, bmpName), ImageFormat.Bmp);
 		}
 
-		public static (int, int) GetHighestAndLowestHeight(int[,] heightMatrix)
+		private static (int, int) GetHighestAndLowestHeight(int[,] heightMatrix)
 		{
 			var matrixWidth = heightMatrix.GetLength(0);
 			var matrixHeight = heightMatrix.GetLength(1);
@@ -74,7 +74,7 @@ namespace Sand
 			return (highestHeight, lowestHeight);
 		}
 
-		public static void CompressMatrixToFitImage(int[,] heightMatrix, int highestHeight, int lowestHeight)
+		private static void CompressMatrixToFitImage(int[,] heightMatrix, int highestHeight, int lowestHeight)
 		{
 			float maxGreyscale = 255;
 			float minGreyScale = 0;

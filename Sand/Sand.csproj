@@ -44,13 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exporters\objCube.cs" />
     <Compile Include="HeigthLimitPatternLibrary.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SandTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SandColumn.cs" />
-    <Compile Include="SandToImageOutputter.cs" />
+    <Compile Include="Exporters\SandTo3dFileExporter.cs" />
+    <Compile Include="Exporters\SandToImageExporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
