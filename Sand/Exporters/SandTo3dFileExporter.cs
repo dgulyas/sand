@@ -1,7 +1,8 @@
-﻿using System.Text;
-using System.IO;
+﻿using System.IO;
+using System.Linq;
+using System.Text;
 
-namespace Sand
+namespace Sand.Exporters
 {
 	public class SandTo3dFileExporter
 	{
@@ -15,12 +16,21 @@ namespace Sand
 			{
 				for(int y = 0; y < sand.GetLength(1); y++)
 				{
-					for (int z = 0; z <= sand[x, y].Height; z++) {
+					var minHeight = GetMinHeight(sand[x, y]);
+
+					for (int z = sand[x,y].Height; z >= minHeight; z--) {
 						sb.Append(GetCubeDefinition(x,y,z));
 					}
+					sb.Append(GetCubeDefinition(x, y, 0));
 				}
 			}
 			File.WriteAllText(Path.Combine(outputFolder, objFileName), sb.ToString());
+		}
+
+		private static int GetMinHeight(SandColumn column)
+		{
+			var minNeighbourHeight = column.Neighbours.Min(n => n.Height);
+			return column.Height < minNeighbourHeight ? column.Height : minNeighbourHeight;
 		}
 
 		private static string GetCubeDefinition(int X, int Y, int Z)

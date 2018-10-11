@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sand.Exporters;
 
 namespace Sand
 {
@@ -28,8 +29,8 @@ namespace Sand
 				//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
 			}
 			//PrintMapHeights(m_sand);
-			SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\david\Desktop\out\", $"testF.png");
-			SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\david\Desktop\out\", $"testF.obj");
+			SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out", $"testF.png");
+			SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\dgulyas\Desktop\out", $"testF.obj");
 			//Console.ReadLine();
 		}
 
@@ -68,7 +69,7 @@ namespace Sand
 			{
 				for(int y = 0; y < sand.GetLength(1); y++)
 				{
-					var columnSandMoved = SettleColumn(sand, sand[x,y]);
+					var columnSandMoved = SettleColumn(sand[x,y]);
 					if (columnSandMoved)
 					{
 						sandMoved = true;
@@ -90,7 +91,7 @@ namespace Sand
 			var sandMoved = false;
 			foreach (var sandColumn in shuffledColumns)
 			{
-				var columnSandMoved = SettleColumn(sand, sandColumn);
+				var columnSandMoved = SettleColumn(sandColumn);
 				if (columnSandMoved)
 				{
 					sandMoved = true;
@@ -113,7 +114,7 @@ namespace Sand
 			}
 		}
 
-		private static bool SettleColumn(SandColumn[,] sand, SandColumn column)
+		private static bool SettleColumn(SandColumn column)
 		{
 			var columnChangedOnce = false; //if the column changed at all
 

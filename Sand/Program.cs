@@ -19,8 +19,6 @@ namespace Sand
 
 			SaveMatrixAsPng(matrix, "test");
 
-			int[,] array = new int[11, 11];
-
 			var pointsAtDistance = CalcPointsAtDistance();
 			foreach (var key in pointsAtDistance.Keys)
 			{
@@ -30,15 +28,6 @@ namespace Sand
 					Console.Write($"({point.X},{point.Y}) ");
 				}
 				Console.WriteLine();
-			}
-		}
-
-		static void Poke(int[,] sand, Point coords)
-		{
-			//this should simulate a ball being placed in the sand
-			for (int xDelt = -5; xDelt <= 5; xDelt++)
-			{
-
 			}
 		}
 
