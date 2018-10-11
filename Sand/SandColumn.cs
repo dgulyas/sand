@@ -7,6 +7,7 @@ namespace Sand
 		public int Height;
 		public int HeightLimit;
 		public List<SandColumn> Neighbours;
+		public Point Location;
 
 		public float Pressure => Height <= HeightLimit ? 0 : ((float)Height / (float)HeightLimit) - 1;
 

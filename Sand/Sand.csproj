@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exporters\objCube.cs" />
     <Compile Include="HeigthLimitPatternLibrary.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />

@@ -22,14 +22,14 @@ namespace Sand
 			//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
 
 			var iteration = 0;
-			while (SettleMap(sand) && iteration++ < 200)
+			while (SettleMapRandom(sand) && iteration++ < 5)
 			{
 				Console.WriteLine(iteration);
 				//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
 			}
 			//PrintMapHeights(m_sand);
-			SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\david\Desktop\out\", $"testE.png");
-			SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\david\Desktop\out\", $"testE.obj");
+			SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\david\Desktop\out\", $"testF.png");
+			SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\david\Desktop\out\", $"testF.obj");
 			//Console.ReadLine();
 		}
 
@@ -41,7 +41,12 @@ namespace Sand
 			{
 				for (int y = 0; y < height; y++)
 				{
-					sand[x, y] = new SandColumn { HeightLimit = defaultHeightLimit, Height = defaultSandHeight };
+					sand[x, y] = new SandColumn
+					{
+						HeightLimit = defaultHeightLimit,
+						Height = defaultSandHeight,
+						Location = new Point { X = x, Y = y }
+					};
 				}
 			}
 
@@ -63,7 +68,7 @@ namespace Sand
 			{
 				for(int y = 0; y < sand.GetLength(1); y++)
 				{
-					var columnSandMoved = SettleColumn(sand, new Point { X = x, Y = y });
+					var columnSandMoved = SettleColumn(sand, sand[x,y]);
 					if (columnSandMoved)
 					{
 						sandMoved = true;
@@ -73,10 +78,43 @@ namespace Sand
 			return sandMoved;
 		}
 
-		private static bool SettleColumn(SandColumn[,] sand, Point location)
+		private static bool SettleMapRandom(SandColumn[,] sand)
 		{
-			var column = sand[location.X, location.Y];
+			var shuffledColumns = new List<SandColumn>();
+			foreach (var column in sand)
+			{
+				shuffledColumns.Add(column);
+			}
+			Shuffle(shuffledColumns);
 
+			var sandMoved = false;
+			foreach (var sandColumn in shuffledColumns)
+			{
+				var columnSandMoved = SettleColumn(sand, sandColumn);
+				if (columnSandMoved)
+				{
+					sandMoved = true;
+				}
+			}
+			return sandMoved;
+		}
+
+		public static void Shuffle<T>(List<T> list)
+		{
+			Random rng = new Random();
+			int n = list.Count;
+			while (n > 1)
+			{
+				n--;
+				int k = rng.Next(n + 1);
+				T value = list[k];
+				list[k] = list[n];
+				list[n] = value;
+			}
+		}
+
+		private static bool SettleColumn(SandColumn[,] sand, SandColumn column)
+		{
 			var columnChangedOnce = false; //if the column changed at all
 
 			bool columnChanged; //if the column changed in this iteration
