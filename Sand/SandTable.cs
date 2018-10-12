@@ -29,8 +29,8 @@ namespace Sand
 				//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
 			}
 			//PrintMapHeights(m_sand);
-			SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out", $"testF.png");
-			SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\dgulyas\Desktop\out", $"testF.obj");
+			SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\sand", $"testG.png");
+			SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\dgulyas\Desktop\out\sand", $"testG.obj");
 			//Console.ReadLine();
 		}
 

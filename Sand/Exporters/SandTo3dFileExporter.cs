@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Sand.Exporters
@@ -8,6 +7,8 @@ namespace Sand.Exporters
 	{
 		//https://3dviewer.net/
 		//http://paulbourke.net/dataformats/obj/
+		//https://slimdx.org/tutorials/SimpleTriangle.php
+		//WPF 3d ViewPort
 
 		public static void SaveSandAs3dFile(SandColumn[,] sand, string outputFolder, string objFileName)
 		{
@@ -16,24 +17,13 @@ namespace Sand.Exporters
 			{
 				for(int y = 0; y < sand.GetLength(1); y++)
 				{
-					var minHeight = GetMinHeight(sand[x, y]);
-
-					for (int z = sand[x,y].Height; z >= minHeight; z--) {
-						sb.Append(GetCubeDefinition(x,y,z));
-					}
-					sb.Append(GetCubeDefinition(x, y, 0));
+					sb.Append(GetCubeDefinition(x, y, sand[x, y].Height));
 				}
 			}
 			File.WriteAllText(Path.Combine(outputFolder, objFileName), sb.ToString());
 		}
 
-		private static int GetMinHeight(SandColumn column)
-		{
-			var minNeighbourHeight = column.Neighbours.Min(n => n.Height);
-			return column.Height < minNeighbourHeight ? column.Height : minNeighbourHeight;
-		}
-
-		private static string GetCubeDefinition(int X, int Y, int Z)
+		private static string GetCubeDefinition(int x, int y, int zTop)
 		{
 			/* modified version of cube found at http://paulbourke.net/dataformats/obj/
 			v 0 1 1
@@ -54,14 +44,14 @@ namespace Sand.Exporters
 			var newLine = System.Environment.NewLine;
 
 			var sb = new StringBuilder("");
-			sb.Append($"v {X} {Y + 1} {Z + 1}{newLine}");
-			sb.Append($"v {X} {Y} {Z + 1}{newLine}");
-			sb.Append($"v {X + 1} {Y} {Z + 1}{newLine}");
-			sb.Append($"v {X + 1} {Y + 1} {Z + 1}{newLine}");
-			sb.Append($"v {X} {Y + 1} {Z}{newLine}");
-			sb.Append($"v {X} {Y} {Z}{newLine}");
-			sb.Append($"v {X + 1} {Y} {Z}{newLine}");
-			sb.Append($"v {X + 1} {Y + 1} {Z}{newLine}");
+			sb.Append($"v {x}     {y + 1} {zTop}{newLine}");
+			sb.Append($"v {x}     {y}     {zTop}{newLine}");
+			sb.Append($"v {x + 1} {y}     {zTop}{newLine}");
+			sb.Append($"v {x + 1} {y + 1} {zTop}{newLine}");
+			sb.Append($"v {x}     {y + 1} {-1}{newLine}");
+			sb.Append($"v {x}     {y}     {-1}{newLine}");
+			sb.Append($"v {x + 1} {y}     {-1}{newLine}");
+			sb.Append($"v {x + 1} {y + 1} {-1}{newLine}");
 
 			sb.Append($"f -1 -2 -3 -4{newLine}");
 			sb.Append($"f -8 -7 -6 -5{newLine}");
