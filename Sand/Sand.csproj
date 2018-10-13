@@ -52,6 +52,7 @@
     <Compile Include="SandColumn.cs" />
     <Compile Include="Exporters\SandTo3dFileExporter.cs" />
     <Compile Include="Exporters\SandToImageExporter.cs" />
+    <Compile Include="Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

@@ -10,6 +10,8 @@ namespace Sand.Exporters
 		//https://slimdx.org/tutorials/SimpleTriangle.php
 		//WPF 3d ViewPort
 
+
+		//For every column create a 3d box at the columns location with dimensions 1x1xheight
 		public static void SaveSandAs3dFile(SandColumn[,] sand, string outputFolder, string objFileName)
 		{
 			var sb = new StringBuilder("");

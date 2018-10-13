@@ -1,40 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sand.Exporters;
 
 namespace Sand
 {
 	public class SandTable
 	{
-		private const int Size = 23;
 		private static readonly Random Rnd = new Random();
 
-		public static void Test2()
-		{
-			var sand = CreateSandTable(Size, Size, 15);
-
-			//sand[25, 25] = new SandColumn { HeightLimit = int.MaxValue, Height = 500 };
-
-			ClearHeightLimits(sand);
-			ApplyHeightLimitPattern(sand, HeigthLimitPatternLibrary.SmallCube, new Point{X=10, Y=10, Height = 10});
-
-			//int iteration = 0;
-			//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
-
-			var iteration = 0;
-			while (SettleMapRandom(sand) && iteration++ < 5)
-			{
-				Console.WriteLine(iteration);
-				//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
-			}
-			//PrintMapHeights(m_sand);
-			SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\sand", $"testG.png");
-			SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\dgulyas\Desktop\out\sand", $"testG.obj");
-			//Console.ReadLine();
-		}
-
-		private static SandColumn[,] CreateSandTable(int height, int width, int defaultSandHeight, int defaultHeightLimit = int.MaxValue)
+		public static SandColumn[,] CreateSandTable(int height, int width, int defaultSandHeight, int defaultHeightLimit = int.MaxValue)
 		{
 			var sand = new SandColumn[width,height];
 
@@ -79,7 +53,7 @@ namespace Sand
 			return sandMoved;
 		}
 
-		private static bool SettleMapRandom(SandColumn[,] sand)
+		public static bool SettleMapRandom(SandColumn[,] sand)
 		{
 			var shuffledColumns = new List<SandColumn>();
 			foreach (var column in sand)
@@ -206,7 +180,7 @@ namespace Sand
 			}
 		}
 
-		private static void ClearHeightLimits(SandColumn[,] sand)
+		public static void ClearHeightLimits(SandColumn[,] sand)
 		{
 			foreach (var sandColumn in sand)
 			{
@@ -220,7 +194,7 @@ namespace Sand
 		/// <param name="sand">The sand field that the height limit pattern is applied to.</param>
 		/// <param name="pattern">A 2D matrix of height patterns</param>
 		/// <param name="origin">The point that the upper right (0,0) part of the pattern should be at</param>
-		private static void ApplyHeightLimitPattern(SandColumn[,] sand, int[,] pattern, Point origin)
+		public static void ApplyHeightLimitPattern(SandColumn[,] sand, int[,] pattern, Point origin)
 		{
 			for (int x = 0; x < pattern.GetLength(0); x++)
 			{

@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace Sand
+namespace Sand.Exporters
 {
 	//takes a matrix of SandColumns and outputs a png
 	public class SandToImageExporter
