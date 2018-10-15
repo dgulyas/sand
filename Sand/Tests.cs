@@ -28,5 +28,17 @@ namespace Sand
 			//Console.ReadLine();
 		}
 
+		public static void Test3()
+		{
+			var sand = SandTable.CreateSandTable(Size, Size, 15);
+
+			SandTable.ClearHeightLimits(sand);
+			SandTable.ApplyHeightLimitPattern(sand, HeigthLimitPatternLibrary.SmallCube, new Point { X = 10, Y = 10, Height = 10 });
+
+			SandTable.SettleMapTwoPass(sand);
+			Exporters.SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\david\Desktop\out", $"testK.png");
+			Exporters.SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\david\Desktop\out", $"testK.obj");
+		}
+
 	}
 }

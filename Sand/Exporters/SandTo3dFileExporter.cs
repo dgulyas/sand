@@ -11,7 +11,7 @@ namespace Sand.Exporters
 		//WPF 3d ViewPort
 
 
-		//For every column create a 3d box at the columns location with dimensions 1x1xheight
+		//For every column create a 3d box at the columns location with dimensions 1x1x(height+1)
 		public static void SaveSandAs3dFile(SandColumn[,] sand, string outputFolder, string objFileName)
 		{
 			var sb = new StringBuilder("");
@@ -19,7 +19,7 @@ namespace Sand.Exporters
 			{
 				for(int y = 0; y < sand.GetLength(1); y++)
 				{
-					sb.Append(GetCubeDefinition(x, y, sand[x, y].Height));
+					sb.Append(GetCubeDefinition(x, y, sand[x, y].Height+1));
 				}
 			}
 			File.WriteAllText(Path.Combine(outputFolder, objFileName), sb.ToString());
@@ -50,10 +50,10 @@ namespace Sand.Exporters
 			sb.Append($"v {x}     {y}     {zTop}{newLine}");
 			sb.Append($"v {x + 1} {y}     {zTop}{newLine}");
 			sb.Append($"v {x + 1} {y + 1} {zTop}{newLine}");
-			sb.Append($"v {x}     {y + 1} {-1}{newLine}");
-			sb.Append($"v {x}     {y}     {-1}{newLine}");
-			sb.Append($"v {x + 1} {y}     {-1}{newLine}");
-			sb.Append($"v {x + 1} {y + 1} {-1}{newLine}");
+			sb.Append($"v {x}     {y + 1} {0}{newLine}");
+			sb.Append($"v {x}     {y}     {0}{newLine}");
+			sb.Append($"v {x + 1} {y}     {0}{newLine}");
+			sb.Append($"v {x + 1} {y + 1} {0}{newLine}");
 
 			sb.Append($"f -1 -2 -3 -4{newLine}");
 			sb.Append($"f -8 -7 -6 -5{newLine}");

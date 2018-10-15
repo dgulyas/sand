@@ -30,6 +30,7 @@ namespace Sand
 				for (int y = 0; y < height; y++)
 				{
 					sand[x, y].Neighbours = GetNeighbours(sand, new Point {X = x, Y = y});
+					Shuffle(sand[x, y].Neighbours);
 				}
 			}
 
@@ -135,10 +136,85 @@ namespace Sand
 			return columnChangedOnce;
 		}
 
-		private static void MoveSand(SandColumn source, SandColumn dest)
+		//2 passes over sand
+		//1st pass, move all sand that overflows the maxHeight to the closest column that has room
+		//2nd pass, apply gravity
+		//Assumes that it's possible to reduce all columns to 0 pressure.
+		public static void SettleMapTwoPass(SandColumn[,] sand)
 		{
-			source.Height--;
-			dest.Height++;
+			foreach (var column in sand)
+			{
+				SettlePressuredSand(column);
+			}
+
+			for (int i = 0; i < 30; i++)
+			{
+				foreach (var column in sand)
+				{
+					ApplyGravity(column);
+				}
+			}
+		}
+
+		private static void SettlePressuredSand(SandColumn column)
+		{
+			//This is a basic breadth first search using a queue
+			if (column.Pressure <= 0)
+			{
+				return;
+			}
+
+			var neighbourQueue = new Queue<SandColumn>();
+			var visitedNeighbours = new List<SandColumn>();
+			neighbourQueue.Enqueue(column);
+			while (column.Pressure > 0)
+			{
+				var currentNeighbour = neighbourQueue.Dequeue();
+				visitedNeighbours.Add(currentNeighbour);
+				var emptySpace = currentNeighbour.NumExcessRoom;
+				if (emptySpace > 0)
+				{
+					MoveSand(column, currentNeighbour, Math.Min(column.NumExcessSand, emptySpace));
+				}
+
+				foreach (var currentNeighbourNeighbour in currentNeighbour.Neighbours)
+				{
+					if (!visitedNeighbours.Contains(currentNeighbourNeighbour))
+					{
+						neighbourQueue.Enqueue(currentNeighbourNeighbour);
+					}
+				}
+			}
+		}
+
+		private static void ApplyGravity(SandColumn column)
+		{
+			var noPressureLowerNeighbours = new Queue<SandColumn>();
+			Shuffle(column.Neighbours);
+			foreach (var neighbour in column.Neighbours)
+			{
+				noPressureLowerNeighbours.Enqueue(neighbour);
+			}
+
+			while (noPressureLowerNeighbours.Count > 0)
+			{
+				var neighbour = noPressureLowerNeighbours.Dequeue();
+
+				if (neighbour.Height + 1 < column.Height && neighbour.NumExcessRoom > 0)
+				{
+					MoveSand(column, neighbour);
+					if (neighbour.Height + 1 < column.Height && neighbour.NumExcessRoom > 0)
+					{
+						noPressureLowerNeighbours.Enqueue(neighbour);
+					}
+				}
+			}
+		}
+
+		private static void MoveSand(SandColumn source, SandColumn dest, int amount = 1)
+		{
+			source.Height -= amount;
+			dest.Height += amount;
 		}
 
 		private static List<SandColumn> GetNeighbours(SandColumn[,] sand, Point location)
