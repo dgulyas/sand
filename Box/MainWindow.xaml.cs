@@ -1,16 +1,13 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using Sand;
+using Point = Sand.Point;
 
 namespace Box
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
 		private const int Size = 23;
-		private SandColumn[,] sand = SandTable.CreateSandTable(Size, Size, 10);
+		private readonly SandColumn[,] m_sand = SandTable.CreateSandTable(Size, Size, 15);
 
 		public MainWindow()
 		{
@@ -19,7 +16,18 @@ namespace Box
 
 		private void NextButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			File.WriteAllText(Path.Combine(@"C:\Users\dgulyas\Desktop\out", "buttonClick"), "Thing");
+			//((MainViewModel)this.DataContext).AddBox(new Sand.Point{X=0,Y=0}, 1,1,1);
+			((MainViewModel)DataContext).Clear();
+
+
+			SandTable.ClearHeightLimits(m_sand);
+			SandTable.ApplyHeightLimitPattern(m_sand, HeigthLimitPatternLibrary.SmallCube, new Point { X = 10, Y = 10, Height = 10 });
+			SandTable.SettleMapTwoPass(m_sand);
+
+			foreach (var column in m_sand)
+			{
+				((MainViewModel)DataContext).AddBox(column.Location, 1, 1, column.Height);
+			}
 		}
 	}
 }

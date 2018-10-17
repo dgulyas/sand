@@ -12,7 +12,7 @@
 			<ColumnDefinition Width="680" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-		<HelixToolkit:HelixViewport3D ZoomExtentsWhenLoaded="True" Grid.Column="0" Name="3dPort">
+		<HelixToolkit:HelixViewport3D ZoomExtentsWhenLoaded="True" Grid.Column="0">
 			<HelixToolkit:SunLight/>
 			<ModelVisual3D Content="{Binding Model}"/>
 			<HelixToolkit:GridLinesVisual3D Width="8" Length="8" MinorDistance="1" MajorDistance="1" Thickness="0.01"/>
