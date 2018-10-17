@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainViewModel.cs" company="Helix Toolkit">
-//   Copyright (c) 2014 Helix Toolkit contributors
-// </copyright>
-// <summary>
-//   Provides a ViewModel for the Main window.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Box
+﻿namespace Box
 {
 	using System.Windows.Media;
 	using System.Windows.Media.Media3D;
