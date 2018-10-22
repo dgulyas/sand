@@ -27,10 +27,12 @@ namespace Box
 			SandTable.ApplyHeightLimitPattern(m_sand, HeigthLimitPatternLibrary.SmallCube, m_holeLocation);
 			SandTable.SettleMapTwoPass(m_sand);
 
+			((MainViewModel)DataContext).StartAdding();
 			foreach (var column in m_sand)
 			{
 				((MainViewModel)DataContext).AddBox(column.Location, 1, 1, column.Height);
 			}
+			((MainViewModel)DataContext).FinishAdding();
 		}
 	}
 }

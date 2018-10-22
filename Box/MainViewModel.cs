@@ -10,12 +10,14 @@ namespace Box
 {
 	public class MainViewModel
 	{
+		private MeshBuilder meshBuilder;
+		private Material material2 = MaterialHelper.CreateMaterial(Colors.Green);
 
 		public MainViewModel()
 		{
 			this.Model = modelGroup;
 
-			var meshBuilder = new MeshBuilder(false, false);
+			meshBuilder = new MeshBuilder(false, false);
 			meshBuilder.AddBox(new Rect3D(0, 0, 0, 1, 2, 4));
 			var mesh = meshBuilder.ToMesh(true);
 			var greenMaterial = MaterialHelper.CreateMaterial(Colors.Green);
@@ -23,14 +25,19 @@ namespace Box
 			modelGroup.Children.Add(new GeometryModel3D { Geometry = mesh, Material = greenMaterial, BackMaterial = greenMaterial });
 		}
 
+		public void StartAdding()
+		{
+			meshBuilder = new MeshBuilder(false, false);
+		}
+
 		public void AddBox(Sand.Point boxLocation, int xLength, int yLength, int height)
 		{
-			var meshBuilder = new MeshBuilder(false, false);
 			meshBuilder.AddBox(new Rect3D(boxLocation.X, boxLocation.Y, 0, xLength, yLength, height));
+		}
+
+		public void FinishAdding()
+		{
 			var mesh = meshBuilder.ToMesh(true);
-
-			var material2 = MaterialHelper.CreateMaterial(Colors.Green);
-
 			modelGroup.Children.Add(new GeometryModel3D { Geometry = mesh, Material = material2, BackMaterial = material2 });
 		}
 
