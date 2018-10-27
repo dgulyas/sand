@@ -4,8 +4,19 @@ namespace Sand
 {
 	public class SandColumn
 	{
-		public int Height;
-		public int HeightLimit;
+		private int m_height;
+		public int Height
+		{
+			get => m_height;
+			set => m_height = value < 0 ? 0 : value;
+		}
+
+		private int m_heightLimit;
+		public int HeightLimit {
+			get => m_heightLimit;
+			set => m_heightLimit = value < 0 ? 0 : value;
+		}
+
 		public List<SandColumn> Neighbours;
 		public Point Location;
 
@@ -23,7 +34,7 @@ namespace Sand
 
 		public override string ToString()
 		{
-			return $"Height:{Height}, HightLimit:{HeightLimit}, Pressure:{Pressure}";
+			return $"Height:{Height}, HeightLimit:{HeightLimit}, Pressure:{Pressure}";
 		}
 	}
 }

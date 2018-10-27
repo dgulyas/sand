@@ -9,11 +9,12 @@ namespace Box
 		private const int Size = 100;
 		private readonly SandColumn[,] m_sand = SandTable.CreateSandTable(Size, Size, 15);
 		private readonly Point m_holeLocation;
+		private readonly int?[,] m_spherePattern = HeightLimitPatternLibrary.Sphere(20);
 
 		public MainWindow()
 		{
 			InitializeComponent();
-			m_holeLocation = new Point {X = 6, Y = 6, Height = 10};
+			m_holeLocation = new Point {X = 15, Y = 15, Height = 15};
 		}
 
 		private void NextButton_OnClick(object sender, RoutedEventArgs e)
@@ -24,13 +25,14 @@ namespace Box
 			m_holeLocation.Y++;
 
 			SandTable.ClearHeightLimits(m_sand);
-			SandTable.ApplyHeightLimitPattern(m_sand, HeigthLimitPatternLibrary.SmallCube, m_holeLocation);
+			SandTable.ApplyHeightLimitPattern(m_sand, m_spherePattern, m_holeLocation);
 			SandTable.SettleMapTwoPass(m_sand);
 
 			((MainViewModel)DataContext).StartAdding();
 			foreach (var column in m_sand)
 			{
 				((MainViewModel)DataContext).AddBox(column.Location, 1, 1, column.Height);
+
 			}
 			((MainViewModel)DataContext).FinishAdding();
 		}

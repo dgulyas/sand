@@ -270,18 +270,21 @@ namespace Sand
 		/// <param name="sand">The sand field that the height limit pattern is applied to.</param>
 		/// <param name="pattern">A 2D matrix of height patterns</param>
 		/// <param name="origin">The point that the upper right (0,0) part of the pattern should be at</param>
-		public static void ApplyHeightLimitPattern(SandColumn[,] sand, int[,] pattern, Point origin)
+		public static void ApplyHeightLimitPattern(SandColumn[,] sand, int?[,] pattern, Point origin)
 		{
 			for (int x = 0; x < pattern.GetLength(0); x++)
 			{
 				for (int y = 0; y < pattern.GetLength(1); y++)
 				{
-					var targetX = x + origin.X;
-					var targetY = y + origin.Y;
-					//if the point we want to modify is inside the bounds of sand
-					if (targetX >= 0 && targetX < sand.GetLength(0) && targetY >= 0 && targetY < sand.GetLength(1))
+					if (pattern[x, y] != null)
 					{
-						sand[targetX, targetY].HeightLimit = origin.Height + pattern[x, y];
+						var targetX = x + origin.X;
+						var targetY = y + origin.Y;
+						//if the point we want to modify is inside the bounds of sand
+						if (targetX >= 0 && targetX < sand.GetLength(0) && targetY >= 0 && targetY < sand.GetLength(1))
+						{
+							sand[targetX, targetY].HeightLimit = origin.Height + pattern[x, y].Value;
+						}
 					}
 				}
 			}

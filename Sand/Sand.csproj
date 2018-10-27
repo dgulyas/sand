@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HeigthLimitPatternLibrary.cs" />
+    <Compile Include="HeightLimitPatternLibrary.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SandTable.cs" />

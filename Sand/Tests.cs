@@ -11,7 +11,7 @@ namespace Sand
 			var sand = SandTable.CreateSandTable(Size, Size, 15);
 
 			SandTable.ClearHeightLimits(sand);
-			SandTable.ApplyHeightLimitPattern(sand, HeigthLimitPatternLibrary.SmallCube, new Point { X = 10, Y = 10, Height = 10 });
+			SandTable.ApplyHeightLimitPattern(sand, HeightLimitPatternLibrary.SmallCube, new Point { X = 10, Y = 10, Height = 10 });
 
 			//int iteration = 0;
 			//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
@@ -33,11 +33,28 @@ namespace Sand
 			var sand = SandTable.CreateSandTable(Size, Size, 15);
 
 			SandTable.ClearHeightLimits(sand);
-			SandTable.ApplyHeightLimitPattern(sand, HeigthLimitPatternLibrary.SmallCube, new Point { X = 10, Y = 10, Height = 10 });
+			SandTable.ApplyHeightLimitPattern(sand, HeightLimitPatternLibrary.SmallCube, new Point { X = 10, Y = 10, Height = 10 });
 
 			SandTable.SettleMapTwoPass(sand);
 			Exporters.SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\david\Desktop\out", $"testK.png");
 			Exporters.SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\david\Desktop\out", $"testK.obj");
+		}
+
+		public static void Test4()
+		{
+			var diameter = 30;
+			var sand = SandTable.CreateSandTable(diameter, diameter, diameter/2);
+			var spherePattern = HeightLimitPatternLibrary.Sphere(diameter);
+
+			SandTable.ApplyHeightLimitPattern(sand,spherePattern, new Point{X=0, Y = 0, Height = diameter/2});
+
+			foreach (var sandColumn in sand)
+			{
+				sandColumn.Height = sandColumn.HeightLimit;
+			}
+
+			Exporters.SandToImageExporter.SaveMatrixAsImage(sand, @"C:\Users\david\Desktop\out", $"testL.png");
+			Exporters.SandTo3dFileExporter.SaveSandAs3dFile(sand, @"C:\Users\david\Desktop\out", $"testL.obj");
 		}
 
 	}
