@@ -14,34 +14,34 @@ namespace Box
 {
 	public class MainViewModel
 	{
-		private Material topMaterial = MaterialHelper.CreateMaterial(Colors.HotPink);
-		private Material bottomMaterial = MaterialHelper.CreateMaterial(Colors.HotPink);
-		private Material boxTopMaterial = MaterialHelper.CreateMaterial(Colors.Brown);
-		private Material boxBottomMaterial = MaterialHelper.CreateMaterial(Colors.HotPink);
-		private Material ballMaterial = MaterialHelper.CreateMaterial(Brushes.Red, 500, 255, true);
+		private readonly Material topMaterial = MaterialHelper.CreateMaterial(Colors.HotPink);
+		private readonly Material bottomMaterial = MaterialHelper.CreateMaterial(Colors.HotPink);
+		private readonly Material boxTopMaterial = MaterialHelper.CreateMaterial(Colors.Brown);
+		private readonly Material boxBottomMaterial = MaterialHelper.CreateMaterial(Colors.HotPink);
+		private readonly Material ballMaterial = MaterialHelper.CreateMaterial(Brushes.Red, 500, 255, true);
 
 		//private Material sand = MaterialHelper.CreateImageMaterial("sand.jpg", 1);
 
 		public MainViewModel()
 		{
-			this.Model = modelGroup;
+			Model = m_modelGroup;
 			topMaterial = MaterialHelper.CreateImageMaterial("maglev.png", 1);
 
 		}
 
-		internal void AddMeshHeights(SandColumn[,] m_sand)
+		internal void AddMeshHeights(SandColumn[,] sand)
 		{
 			var points = new List<Point3D>();
 			var texCoords = new List<System.Windows.Point>();
-			var indicies = new List<int>();
-			var width = m_sand.GetLength(0);
-			var height = m_sand.GetLength(1);
+			var indices = new List<int>();
+			var width = sand.GetLength(0);
+			var height = sand.GetLength(1);
 
 			for (var x = 0; x < width; x++)
 			{
 				for (var y = 0; y < height; y++)
 				{
-					var column = m_sand[x, y];
+					var column = sand[x, y];
 					points.Add(new Point3D(x, y, column.Height));
 					texCoords.Add(new System.Windows.Point(x / (double)width, (height - y) / (double)height));
 
@@ -57,23 +57,23 @@ namespace Box
 						var p1 = (y * width) + x;
 						var p2 = (y * width) + (x + 1);
 						var p3 = ((y + 1) * width) + x;
-						indicies.Add(p3);
-						indicies.Add(p2);
-						indicies.Add(p1);
+						indices.Add(p3);
+						indices.Add(p2);
+						indices.Add(p1);
 					}
 					if (y > 0)
 					{
 						var p1 = (y * width) + x;
 						var p2 = (y * width) + (x + 1);
 						var p3 = ((y - 1) * width) + (x + 1);
-						indicies.Add(p1);
-						indicies.Add(p2);
-						indicies.Add(p3);
+						indices.Add(p1);
+						indices.Add(p2);
+						indices.Add(p3);
 					}
 				}
 			}
-			var mesh = new Mesh3D(points, texCoords, indicies);
-			modelGroup.Children.Add(new GeometryModel3D { Geometry = mesh.ToMeshGeometry3D(true), Material = topMaterial, BackMaterial = bottomMaterial });
+			var mesh = new Mesh3D(points, texCoords, indices);
+			m_modelGroup.Children.Add(new GeometryModel3D { Geometry = mesh.ToMeshGeometry3D(true), Material = topMaterial, BackMaterial = bottomMaterial });
 		}
 
 
@@ -82,7 +82,7 @@ namespace Box
 			width -= 1;
 			height -= 1;
 			var meshBuilder = new MeshBuilder();
-			var corners = new Point3D[] {
+			var corners = new[] {
 				new Point3D(0, 0, depth),
 				new Point3D(width, 0, depth),
 				new Point3D(width, height , depth),
@@ -97,7 +97,7 @@ namespace Box
 			meshBuilder.AddQuad(corners[2], corners[3], corners[7], corners[6]);
 			meshBuilder.AddQuad(corners[3], corners[0], corners[4], corners[7]);
 			meshBuilder.AddQuad(corners[4], corners[5], corners[6], corners[7]);
-			modelGroup.Children.Add(new GeometryModel3D { Geometry = meshBuilder.ToMesh(true), Material = boxBottomMaterial, BackMaterial = boxTopMaterial });
+			m_modelGroup.Children.Add(new GeometryModel3D { Geometry = meshBuilder.ToMesh(true), Material = boxBottomMaterial, BackMaterial = boxTopMaterial });
 		}
 
 		internal void AddSphere(Point3D location, double radius)
@@ -105,14 +105,14 @@ namespace Box
 			var meshBuilder = new MeshBuilder();
 			meshBuilder.AddSphere(location, radius);
 
-			modelGroup.Children.Add(new GeometryModel3D { Geometry = meshBuilder.ToMesh(true), Material = ballMaterial, BackMaterial = ballMaterial });
+			m_modelGroup.Children.Add(new GeometryModel3D { Geometry = meshBuilder.ToMesh(true), Material = ballMaterial, BackMaterial = ballMaterial });
 		}
 
 		public void Clear()
 		{
-			while (modelGroup.Children.Count > 0)
+			while (m_modelGroup.Children.Count > 0)
 			{
-				modelGroup.Children.RemoveAt(0);
+				m_modelGroup.Children.RemoveAt(0);
 			}
 		}
 
@@ -121,6 +121,6 @@ namespace Box
 		/// </summary>
 		/// <value>The model.</value>
 		public Model3D Model { get; set; }
-		private readonly Model3DGroup modelGroup = new Model3DGroup();
+		private readonly Model3DGroup m_modelGroup = new Model3DGroup();
 	}
 }

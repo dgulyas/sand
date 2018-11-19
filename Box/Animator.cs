@@ -19,11 +19,11 @@ namespace Box
 	{
 		private bool m_dropping;
 		private int? m_initialTouchPoint;
-		private int m_radius;
+		private readonly int m_radius;
 
 		public DropAnimator(int diameter)
 		{
-			this.m_radius = diameter / 2;
+			m_radius = diameter / 2;
 			m_dropping = true;
 		}
 
@@ -60,7 +60,7 @@ namespace Box
 
 	class JourneyAnimator : IAnimator
 	{
-		private Journey m_journey;
+		private readonly Journey m_journey;
 		private Point m_currentPosition;
 		public JourneyAnimator(Journey journey)
 		{

@@ -25,8 +25,8 @@ namespace Sand
 				//SandToImageOutputter.SaveMatrixAsImage(sand, @"C:\Users\dgulyas\Desktop\out\testC", $"test{iteration++}.png");
 			}
 			//PrintMapHeights(m_sand);
-			Exporters.SandToImageExporter.SaveMatrixAsImage(sand, OutDir, $"testG.png");
-			Exporters.SandTo3dFileExporter.SaveSandAs3dFile(sand, OutDir, $"testG.obj");
+			Exporters.SandToImageExporter.SaveMatrixAsImage(sand, OutDir, "testG.png");
+			Exporters.SandTo3dFileExporter.SaveSandAs3dFile(sand, OutDir, "testG.obj");
 			//Console.ReadLine();
 		}
 
@@ -38,8 +38,8 @@ namespace Sand
 			SandTable.ApplyHeightLimitPattern(sand, HeightLimitPatternLibrary.SmallCube, new Point { X = 10, Y = 10, Height = 10 });
 
 			SandTable.SettleMapTwoPass(sand);
-			Exporters.SandToImageExporter.SaveMatrixAsImage(sand, OutDir, $"testK.png");
-			Exporters.SandTo3dFileExporter.SaveSandAs3dFile(sand, OutDir, $"testK.obj");
+			Exporters.SandToImageExporter.SaveMatrixAsImage(sand, OutDir, "testK.png");
+			Exporters.SandTo3dFileExporter.SaveSandAs3dFile(sand, OutDir, "testK.obj");
 		}
 
 		public static void Test4()
@@ -55,8 +55,8 @@ namespace Sand
 				sandColumn.Height = sandColumn.HeightLimit;
 			}
 
-			Exporters.SandToImageExporter.SaveMatrixAsImage(sand, OutDir, $"testL.png");
-			Exporters.SandTo3dFileExporter.SaveSandAs3dFile(sand, OutDir, $"testL.obj");
+			Exporters.SandToImageExporter.SaveMatrixAsImage(sand, OutDir, "testL.png");
+			Exporters.SandTo3dFileExporter.SaveSandAs3dFile(sand, OutDir, "testL.obj");
 		}
 
 		public static void Test5()

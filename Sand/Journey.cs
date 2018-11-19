@@ -10,10 +10,10 @@ namespace Sand
 		private Path m_currentPath;
 		private Point m_currentLocation;
 
-		private Point lastPoint;
-		private Point nextPoint;
-		private double totalSteps;
-		private double currentStep;
+		private Point m_lastPoint;
+		private Point m_nextPoint;
+		private double m_totalSteps;
+		private double m_currentStep;
 
 		public Journey(Point startingOffset)
 		{
@@ -50,41 +50,41 @@ namespace Sand
 
 		public Point TweenLocations()
 		{
-			if (lastPoint == null)
+			if (m_lastPoint == null)
 			{
-				lastPoint = this.GetNextLocation();
+				m_lastPoint = GetNextLocation();
 			}
 
-			if (nextPoint == null)
+			if (m_nextPoint == null)
 			{
-				nextPoint = this.GetNextLocation();
-				if (nextPoint == null)
+				m_nextPoint = GetNextLocation();
+				if (m_nextPoint == null)
 				{
 					return null;
 				}
-				totalSteps = Math.Max(Math.Max(Math.Abs(nextPoint.X - lastPoint.X), Math.Abs(nextPoint.Y - lastPoint.Y)), Math.Abs(nextPoint.Height - lastPoint.Height));
-				currentStep = 0;
+				m_totalSteps = Math.Max(Math.Max(Math.Abs(m_nextPoint.X - m_lastPoint.X), Math.Abs(m_nextPoint.Y - m_lastPoint.Y)), Math.Abs(m_nextPoint.Height - m_lastPoint.Height));
+				m_currentStep = 0;
 			}
 
-			var xMove = nextPoint.X - lastPoint.X;
-			var yMove = nextPoint.Y - lastPoint.Y;
-			var heightMove = nextPoint.Height - lastPoint.Height;
+			var xMove = m_nextPoint.X - m_lastPoint.X;
+			var yMove = m_nextPoint.Y - m_lastPoint.Y;
+			var heightMove = m_nextPoint.Height - m_lastPoint.Height;
 
-			var factor = currentStep / totalSteps;
+			var factor = m_currentStep / m_totalSteps;
 
 			var tweenPoint = new Point
 			{
-				X = (int)(xMove * factor) + lastPoint.X,
-				Y = (int)(yMove * factor) + lastPoint.Y,
-				Height = (int)(heightMove * factor) + lastPoint.Height,
+				X = (int)(xMove * factor) + m_lastPoint.X,
+				Y = (int)(yMove * factor) + m_lastPoint.Y,
+				Height = (int)(heightMove * factor) + m_lastPoint.Height,
 			};
 
-			currentStep++;
+			m_currentStep++;
 
-			if (currentStep >= totalSteps)
+			if (m_currentStep >= m_totalSteps)
 			{
-				lastPoint = nextPoint;
-				nextPoint = null;
+				m_lastPoint = m_nextPoint;
+				m_nextPoint = null;
 			}
 
 			return tweenPoint;

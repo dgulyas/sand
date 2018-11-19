@@ -19,7 +19,7 @@ namespace Box2
 
 		Point3DCollection m_corners = new Point3DCollection();
 		Int32Collection m_triangles = new Int32Collection();
-		Hashtable pointIndicies = new Hashtable();
+		Hashtable m_pointIndices = new Hashtable();
 
 		public MainWindow()
 		{

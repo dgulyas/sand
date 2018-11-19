@@ -5,24 +5,24 @@ namespace Sand
 {
 	public class Path
 	{
-		private Queue<Point> Points;
-		private bool m_repeat;
+		private readonly Queue<Point> m_points;
+		private readonly bool m_repeat;
 		public Point Offset;
 
 		public Path(Queue<Point> points, bool repeat = false)
 		{
-			Points = points;
+			m_points = points;
 			m_repeat = repeat;
 		}
 
 		public Point GetNextPoint()
 		{
-			if (Points.Count > 0)
+			if (m_points.Count > 0)
 			{
-				var next = Points.Dequeue();
+				var next = m_points.Dequeue();
 				if (m_repeat)
 				{
-					Points.Enqueue(next);
+					m_points.Enqueue(next);
 				}
 				return next + Offset;
 			}
@@ -32,7 +32,7 @@ namespace Sand
 
 		public bool Empty()
 		{
-			return Points.Count == 0;
+			return m_points.Count == 0;
 		}
 
 		public void SetStartingPoint(Point startingPoint)
@@ -44,7 +44,7 @@ namespace Sand
 		{
 			var queue = new Queue<Point>();
 			var regex = new System.Text.RegularExpressions.Regex(@"vec2\((.*?),(.+?)\)?}?$");
-			var points = vecString.Split(new string[] { ")," }, System.StringSplitOptions.RemoveEmptyEntries)
+			var points = vecString.Split(new[] { ")," }, System.StringSplitOptions.RemoveEmptyEntries)
 				.Select(vector =>
 				{
 					var match = regex.Match(vector);
