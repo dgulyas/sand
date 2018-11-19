@@ -20,6 +20,10 @@ namespace Sand
 		public List<SandColumn> Neighbours;
 		public Point Location;
 
+		//This is only used by the gravity algorithm, to determine if we're going to
+		//apply gravity to it again.
+		public bool InGravityQueue;
+
 		public float Pressure => Height <= HeightLimit ? 0 : ((float)Height / (float)HeightLimit) - 1;
 
 		//what would be the new pressure if a level of sand was added or removed?

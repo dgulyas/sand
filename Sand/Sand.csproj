@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HeightLimitPatternLibrary.cs" />
+    <Compile Include="Journey.cs" />
+    <Compile Include="Path.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SandTable.cs" />

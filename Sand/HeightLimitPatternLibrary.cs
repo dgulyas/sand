@@ -24,6 +24,28 @@ namespace Sand
 			{0,  0,  0,  0, 0},
 		};
 
+		public static int?[,] InvidiLogo =
+		{
+			{0,0,0,0,0,null,null,null,null,null,null,null,null},
+			{0,0,0,0,0,0,0,null,null,null,null,null,null},
+			{0,0,0,0,0,0,0,0,0,null,null,null,null},
+			{0,0,0,0,0,0,0,0,0,0,null,null,null},
+			{null,null,null,null,0,0,0,0,0,0,0,null,null},
+			{0,0,0,null,null,null,0,0,0,0,0,0,null},
+			{0,0,0,0,0,null,null,0,0,0,0,0,null},
+			{0,0,0,0,0,0,null,null,0,0,0,0,0},
+			{0,0,0,0,0,0,0,null,0,0,0,0,0},
+			{0,0,0,0,0,0,0,null,0,0,0,0,0}, //middle
+			{0,0,0,0,0,0,0,null,0,0,0,0,0},
+			{0,0,0,0,0,0,null,null,0,0,0,0,0},
+			{0,0,0,0,0,null,null,0,0,0,0,0,null},
+			{0,0,0,null,null,null,0,0,0,0,0,0,null},
+			{null,null,null,null,0,0,0,0,0,0,0,null,null},
+			{0,0,0,0,0,0,0,0,0,0,null,null,null},
+			{0,0,0,0,0,0,0,0,0,null,null,null,null},
+			{0,0,0,0,0,0,0,null,null,null,null,null,null},
+			{0,0,0,0,0,null,null,null,null,null,null,null,null}
+		};
 
 		public static int?[,] Sphere(int diameter)
 		{

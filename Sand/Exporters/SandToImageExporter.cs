@@ -39,7 +39,7 @@ namespace Sand.Exporters
 				}
 			}
 
-			bitmap.Save(Path.Combine(outputFolder, bmpName), ImageFormat.Bmp);
+			//bitmap.Save(Path.Combine(outputFolder, bmpName), ImageFormat.Bmp);
 		}
 
 		private static (int, int) GetHighestAndLowestHeight(int[,] heightMatrix)

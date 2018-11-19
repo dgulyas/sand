@@ -6,7 +6,7 @@ namespace Sand
 	{
 		static void Main(string[] args)
 		{
-			Tests.Test4();
+			Tests.Test5();
 		}
 
 		static Dictionary<int, List<Point>> CalcPointsAtDistance()

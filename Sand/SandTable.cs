@@ -10,7 +10,7 @@ namespace Sand
 
 		public static SandColumn[,] CreateSandTable(int height, int width, int defaultSandHeight, int defaultHeightLimit = int.MaxValue)
 		{
-			var sand = new SandColumn[width,height];
+			var sand = new SandColumn[width, height];
 
 			for (int x = 0; x < width; x++)
 			{
@@ -29,7 +29,7 @@ namespace Sand
 			{
 				for (int y = 0; y < height; y++)
 				{
-					sand[x, y].Neighbours = GetNeighbours(sand, new Point {X = x, Y = y});
+					sand[x, y].Neighbours = GetNeighbours(sand, new Point { X = x, Y = y });
 					Shuffle(sand[x, y].Neighbours);
 				}
 			}
@@ -40,11 +40,11 @@ namespace Sand
 		private static bool SettleMap(SandColumn[,] sand)
 		{
 			var sandMoved = false;
-			for(int x = 0; x < sand.GetLength(0); x++)
+			for (int x = 0; x < sand.GetLength(0); x++)
 			{
-				for(int y = 0; y < sand.GetLength(1); y++)
+				for (int y = 0; y < sand.GetLength(1); y++)
 				{
-					var columnSandMoved = SettleColumn(sand[x,y]);
+					var columnSandMoved = SettleColumn(sand[x, y]);
 					if (columnSandMoved)
 					{
 						sandMoved = true;
@@ -77,12 +77,11 @@ namespace Sand
 
 		public static void Shuffle<T>(List<T> list)
 		{
-			Random rng = new Random();
 			int n = list.Count;
 			while (n > 1)
 			{
 				n--;
-				int k = rng.Next(n + 1);
+				int k = Rnd.Next(n + 1);
 				T value = list[k];
 				list[k] = list[n];
 				list[n] = value;
@@ -123,7 +122,7 @@ namespace Sand
 					MoveSand(column, chosenNeighbour);
 					columnChanged = true;
 				}
-				else if(equalPressureLowerHeightNeighbours.Count > 0)
+				else if (equalPressureLowerHeightNeighbours.Count > 0)
 				{
 					MoveSand(column, equalPressureLowerHeightNeighbours[Rnd.Next(equalPressureLowerHeightNeighbours.Count)]);
 					columnChanged = true;
@@ -156,25 +155,44 @@ namespace Sand
 			}
 		}
 
-		private static void SettlePressuredSand(SandColumn column)
+		//2 passes over sand
+		//1st pass, move all sand that overflows the maxHeight to the closest column that has room
+		//2nd pass, apply gravity
+		//Assumes that it's possible to reduce all columns to 0 pressure.
+		public static void SettleMapTwoPassMinimally(SandColumn[,] sand)
+		{
+			var columnsToApplyGravityTo = new Queue<SandColumn>();
+
+			foreach (var column in sand)
+			{
+				var sandMoved = SettlePressuredSand(column);
+			}
+
+			ApplyGravityMinimally(sand);
+		}
+
+		private static bool SettlePressuredSand(SandColumn column)
 		{
 			//This is a basic breadth first search using a queue
 			if (column.Pressure <= 0)
 			{
-				return;
+				return false;
 			}
 
+			var sandMoved = false;
 			var neighbourQueue = new Queue<SandColumn>();
-			var visitedNeighbours = new List<SandColumn>();
+			var visitedNeighbours = new HashSet<SandColumn>();
 			neighbourQueue.Enqueue(column);
 			while (column.Pressure > 0)
 			{
 				var currentNeighbour = neighbourQueue.Dequeue();
+
 				visitedNeighbours.Add(currentNeighbour);
 				var emptySpace = currentNeighbour.NumExcessRoom;
 				if (emptySpace > 0)
 				{
 					MoveSand(column, currentNeighbour, Math.Min(column.NumExcessSand, emptySpace));
+					sandMoved = true;
 				}
 
 				foreach (var currentNeighbourNeighbour in currentNeighbour.Neighbours)
@@ -185,10 +203,17 @@ namespace Sand
 					}
 				}
 			}
+
+			return sandMoved;
 		}
 
-		private static void ApplyGravity(SandColumn column)
+		/// <summary>
+		/// The return type is a bit conf
+		/// </summary>
+		/// <param name="column"></param>
+		private static bool ApplyGravity(SandColumn column)
 		{
+			var sandMoved = false;
 			var noPressureLowerNeighbours = new Queue<SandColumn>();
 			Shuffle(column.Neighbours);
 			foreach (var neighbour in column.Neighbours)
@@ -203,12 +228,52 @@ namespace Sand
 				if (neighbour.Height + 1 < column.Height && neighbour.NumExcessRoom > 0)
 				{
 					MoveSand(column, neighbour);
+					sandMoved = true;
 					if (neighbour.Height + 1 < column.Height && neighbour.NumExcessRoom > 0)
 					{
 						noPressureLowerNeighbours.Enqueue(neighbour);
 					}
 				}
 			}
+
+			return sandMoved;
+		}
+
+
+		/// <summary>
+		/// Keep a queue of columns that still need to be settled and then
+		/// iterate over them until the queue is empty. This should take
+		/// the theoretically minimal amount of work.
+		/// </summary>
+		private static void ApplyGravityMinimally(SandColumn[,] sand)
+		{
+			var columnsToProcess = new Queue<SandColumn>();
+			foreach (var sandColumn in sand)
+			{
+				columnsToProcess.Enqueue(sandColumn);
+				sandColumn.InGravityQueue = true;
+			}
+
+			while (columnsToProcess.Count > 0)
+			{
+				var currentColumn = columnsToProcess.Dequeue();
+				currentColumn.InGravityQueue = false;
+				var sandMoved = ApplyGravity(currentColumn);
+				if (sandMoved)
+				{
+					columnsToProcess.Enqueue(currentColumn);
+					currentColumn.InGravityQueue = true;
+					foreach (var neighbour in currentColumn.Neighbours)
+					{
+						if (!neighbour.InGravityQueue)
+						{
+							columnsToProcess.Enqueue(neighbour);
+							neighbour.InGravityQueue = true;
+						}
+					}
+				}
+			}
+
 		}
 
 		private static void MoveSand(SandColumn source, SandColumn dest, int amount = 1)
@@ -249,7 +314,7 @@ namespace Sand
 			{
 				for (int y = 0; y < sand.GetLength(1); y++)
 				{
-					Console.Write(sand[x,y].Height);
+					Console.Write(sand[x, y].Height);
 					Console.Write(" ");
 				}
 				Console.WriteLine();

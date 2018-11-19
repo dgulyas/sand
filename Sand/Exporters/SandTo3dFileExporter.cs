@@ -22,7 +22,7 @@ namespace Sand.Exporters
 					sb.Append(GetCubeDefinition(x, y, sand[x, y].Height+1));
 				}
 			}
-			File.WriteAllText(Path.Combine(outputFolder, objFileName), sb.ToString());
+			//File.WriteAllText(Path.Combine(outputFolder, objFileName), sb.ToString());
 		}
 
 		private static string GetCubeDefinition(int x, int y, int zTop)

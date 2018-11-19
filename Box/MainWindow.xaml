@@ -4,21 +4,52 @@
         xmlns:HelixToolkit="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         xmlns:local="clr-namespace:Box"
         Title="Box" Height="600" Width="900">
-	<Window.DataContext>
-		<local:MainViewModel/>
-	</Window.DataContext>
-	<Grid ShowGridLines="True">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="50" />
-		</Grid.ColumnDefinitions>
-		<HelixToolkit:HelixViewport3D ZoomExtentsWhenLoaded="True" Grid.Column="0">
-			<HelixToolkit:SunLight/>
-			<ModelVisual3D Content="{Binding Model}"/>
-			<HelixToolkit:GridLinesVisual3D Width="8" Length="8" MinorDistance="1" MajorDistance="1" Thickness="0.01"/>
-		</HelixToolkit:HelixViewport3D>
-		<StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-			<Button Click="NextButton_OnClick">Next</Button>
-		</StackPanel>
-	</Grid>
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="70" />
+        </Grid.ColumnDefinitions>
+        <HelixToolkit:HelixViewport3D Name="HelixPane" ZoomExtentsWhenLoaded="True" Grid.Column="0">
+            <HelixToolkit:SunLight/>
+            <ModelVisual3D Content="{Binding Model}"/>
+            <HelixToolkit:GridLinesVisual3D Width="8" Length="8" MinorDistance="1" MajorDistance="1" Thickness="0.01"/>
+        </HelixToolkit:HelixViewport3D>
+        <Grid Name="ButtonGrid" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="8" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Grid.Row="0"  Click="MoveUpLeft_OnClick">.</Button>
+            <Button Grid.Column="1" Grid.Row="0"  Click="MoveUp_OnClick">^</Button>
+            <Button Grid.Column="2" Grid.Row="0"  Click="MoveUpRight_OnClick">.</Button>
+            <Button Grid.Column="0" Grid.Row="1"  Click="MoveLeft_OnClick">&lt;</Button>
+            <Button Grid.Column="2" Grid.Row="1"  Click="MoveRight_OnClick">&gt;</Button>
+            <Button Grid.Column="0" Grid.Row="2"  Click="MoveDownLeft_OnClick">.</Button>
+            <Button Grid.Column="1" Grid.Row="2"  Click="MoveDown_OnClick">v</Button>
+            <Button Grid.Column="2" Grid.Row="2"  Click="MoveDownRight_OnClick">.</Button>
+            <Button Grid.Column="0" Grid.Row="4"  Click="MoveZUp_OnClick">U</Button>
+            <Button Grid.Column="2" Grid.Row="4"  Click="MoveZDown_OnClick">D</Button>
+            <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" Click="Drop_Click">Drop</Button>
+            <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" Click="Animate_Click">Animate</Button>
+            <Button Grid.Column="0" Grid.Row="7" Name="Stop" Grid.ColumnSpan="3" Click="Stop_Click">Stop</Button>
+            <Button Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="3" Click="Clear_Click">Clear</Button>
+            <TextBlock Grid.Column="0" Grid.Row="9" Grid.ColumnSpan="3" Name="StatusTextBox">Done</TextBlock>
+        </Grid>
+    </Grid>
 </Window>
