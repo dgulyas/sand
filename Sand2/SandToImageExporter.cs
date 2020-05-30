@@ -32,10 +32,22 @@ namespace Sand2
 			var imgHeight = matrixHeight * 4 + 2; //magic number
 			var imgWidth = matrixWidth * 6; //magic number
 			var bitmap = new Bitmap(imgWidth, imgHeight);
+			ClearBitmap(bitmap, Color.White);
 
 			DrawMatrix(matrix, bitmap);
 
 			bitmap.Save("C:\\Users\\david\\Desktop\\out\\2\\testH.bmp", ImageFormat.Bmp);
+		}
+
+		private static void ClearBitmap(Bitmap bitmap, Color color)
+		{
+			for (int j = 0; j < bitmap.Height; j++)
+			{
+				for (int i = 0; i < bitmap.Width; i++)
+				{
+					bitmap.SetPixel(i,j,color);
+				}
+			}
 		}
 
 		private static void DrawMatrix(int[,] matrix, Bitmap bitmap)
