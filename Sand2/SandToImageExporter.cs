@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 
 namespace Sand2
@@ -23,27 +19,31 @@ namespace Sand2
 			{0, 0, 1, 1, 0, 0}
 		};
 
+		private static int PatternHeight = hexPattern.GetLength(0);
+		private static int PatternWidth = hexPattern.GetLength(1);
+
 		public static void SaveMatrixAsImage(int[,] matrix, string outputFolder, string bmpName)
 		{
 			var (lowestSand, highestSand) = GetLowestAndHighestValue(matrix);
-
 			ScaleMatrixValuesToFitGrayScale(matrix, lowestSand, highestSand);
 
-			var bitmap = new Bitmap(100, 100);
+			int matrixHeight = matrix.GetLength(0);
+			int matrixWidth = matrix.GetLength(1);
+			var imgHeight = matrixHeight * 4 + 2; //magic number
+			var imgWidth = matrixWidth * 6; //magic number
+			var bitmap = new Bitmap(imgWidth, imgHeight);
 
 			DrawMatrix(matrix, bitmap);
 
-			bitmap.Save("C:\\Users\\david\\Desktop\\out\\2\\testG.bmp", ImageFormat.Bmp);
+			bitmap.Save("C:\\Users\\david\\Desktop\\out\\2\\testH.bmp", ImageFormat.Bmp);
 		}
 
 		private static void DrawMatrix(int[,] matrix, Bitmap bitmap)
 		{
 			int matrixHeight = matrix.GetLength(0);
 			int matrixWidth = matrix.GetLength(1);
-			int patternHeight = hexPattern.GetLength(0);
-			int patternWidth = hexPattern.GetLength(1);
 
-			int xOffset = 0;
+			var xOffset = (int)((matrixHeight - 1) * -1.5); //magic number
 
 			for (int y = 0; y < matrixHeight; y++)
 			{
@@ -51,7 +51,7 @@ namespace Sand2
 				{
 					if (matrix[y,x] != 0)
 					{
-						DrawHex(bitmap, x * patternWidth + xOffset, y * (patternHeight - 2), matrix[y,x]); //magic number
+						DrawHex(bitmap, x * PatternWidth + xOffset, y * (PatternHeight - 2), matrix[y,x]); //magic number
 					}
 				}
 				xOffset += 3; //magic number
@@ -60,12 +60,9 @@ namespace Sand2
 
 		private static void DrawHex(Bitmap bitmap, int x, int y, int grayscale)
 		{
-			int patternHeight = hexPattern.GetLength(0);
-			int patternWidth = hexPattern.GetLength(1);
-
-			for (int k = 0; k < patternHeight; k++)
+			for (int k = 0; k < PatternHeight; k++)
 			{
-				for (int l = 0; l < patternWidth; l++)
+				for (int l = 0; l < PatternWidth; l++)
 				{
 					if (hexPattern[k, l] == 1)
 					{
@@ -82,12 +79,12 @@ namespace Sand2
 
 			foreach (var i in matrix)
 			{
-				if (i != 0 && i > highest)
+				if (i != 0 && i > highest) //magic number
 				{
 					highest = i;
 				}
 
-				if (i != 0 && i < lowest)
+				if (i != 0 && i < lowest) //magic number
 				{
 					lowest = i;
 				}
@@ -110,7 +107,7 @@ namespace Sand2
 			{
 				for (int y = 0; y < matrix.GetLength(1); y++)
 				{
-					if (matrix[x, y] != 0)
+					if (matrix[x, y] != 0) //magic number
 					{
 						if (Math.Abs(oldRange) < 0.001) //if the height matrix is all one height
 						{
@@ -127,8 +124,6 @@ namespace Sand2
 					}
 				}
 			}
-
-
 		}
 
 	}
