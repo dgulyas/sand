@@ -18,7 +18,7 @@ namespace Sand2
 			table.sands[new HexPoint(0, 1, -1)].Height = 7;
 
 
-			SandToImageExporter.SaveMatrixAsImage(table.ToMatrix(), "","");
+			SandToImageExporter.SaveMatrixAsImage(table.ToMatrix(), "C:\\Users\\david\\Desktop\\out\\2", "testH.bmp");
 
 
 			//PrintMatrix(table.ToMatrix());

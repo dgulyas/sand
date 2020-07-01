@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 
 
 namespace Sand2
@@ -36,7 +35,7 @@ namespace Sand2
 
 			DrawMatrix(matrix, bitmap);
 
-			bitmap.Save("C:\\Users\\david\\Desktop\\out\\2\\testH.bmp", ImageFormat.Bmp);
+			bitmap.Save(Path.Combine(outputFolder, bmpName), ImageFormat.Bmp);
 		}
 
 		private static void ClearBitmap(Bitmap bitmap, Color color)
