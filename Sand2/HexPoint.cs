@@ -22,7 +22,7 @@ namespace Sand2
 		}
 
 		public static List<HexPoint> HexDirection = new List<HexPoint>
-		{ //one of these to the current point will move to a neighbour.
+		{ //adding one of these to the current point will move to a neighbour.
 			new HexPoint(0,-1,1),
 			new HexPoint(1,-1,0),
 			new HexPoint(1,0,-1),
@@ -54,6 +54,7 @@ namespace Sand2
 			return obj is HexPoint && Equals((HexPoint)obj);
 		}
 
+		//returns a list of hex coords that form a ring at radius around p
 		public static List<HexPoint> HexRing(HexPoint p, int radius)
 		{
 			if(radius < 1) return new List<HexPoint>();
@@ -71,6 +72,20 @@ namespace Sand2
 			}
 
 			return hexInRing;
+		}
+
+		public static List<HexPoint> GetNeighbours(HexPoint p)
+		{	//These are all the hexes touching p
+			//return HexRing(p, 1);
+			//Lets do something faster then using the HexRing function
+
+			var neighbours = new List<HexPoint>(6);
+			foreach (var direction in HexDirection)
+			{
+				neighbours.Add(p + direction);
+			}
+
+			return neighbours;
 		}
 
 		public override string ToString()

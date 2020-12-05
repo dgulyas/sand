@@ -8,7 +8,8 @@ namespace Sand2
 {
 	public class SandToImageExporter
 	{
-		private static int[,]  hexPattern = new int[,]
+		//Specifies which pixles should be colored when drawing a hex.
+		private static readonly int[,]  HexPattern =
 		{
 			{0, 0, 1, 1, 0, 0},
 			{0, 1, 1, 1, 1, 0},
@@ -18,13 +19,15 @@ namespace Sand2
 			{0, 0, 1, 1, 0, 0}
 		};
 
-		private static int PatternHeight = hexPattern.GetLength(0);
-		private static int PatternWidth = hexPattern.GetLength(1);
+		private static int PatternHeight = HexPattern.GetLength(0);
+		private static int PatternWidth = HexPattern.GetLength(1);
 
-		public static void SaveMatrixAsImage(int[,] matrix, string outputFolder, string bmpName)
+		public static void SaveMatrixAsImage(int[,] matrix, string outputFolder, string bmpName, bool scaleMatrix = true)
 		{
-			var (lowestSand, highestSand) = GetLowestAndHighestValue(matrix);
-			ScaleMatrixValuesToFitGrayScale(matrix, lowestSand, highestSand);
+			if (scaleMatrix)
+			{
+				ScaleMatrixValuesToFitGrayScale(matrix);
+			}
 
 			int matrixHeight = matrix.GetLength(0);
 			int matrixWidth = matrix.GetLength(1);
@@ -75,7 +78,7 @@ namespace Sand2
 			{
 				for (int l = 0; l < PatternWidth; l++)
 				{
-					if (hexPattern[k, l] == 1)
+					if (HexPattern[k, l] == 1)
 					{
 						bitmap.SetPixel(x + l, y + k, Color.FromArgb(grayscale, grayscale, grayscale));
 					}
@@ -104,12 +107,15 @@ namespace Sand2
 			return (lowest, highest);
 		}
 
-		private static void ScaleMatrixValuesToFitGrayScale(int[,] matrix, int lowest, int highest)
+		private static void ScaleMatrixValuesToFitGrayScale(int[,] matrix)
 		{
-			//gray scale is 0-255. Ignore 0 because that's a special value indicating there's no sand there.
+			//gray scale is 0-255. We want the highest sand to be printed as black(?) and the lowest sand to be white(?).
+			//Ignore 0 because that's a special value indicating there's no sand there.
 
 			float maxGreyscale = 255;
 			float minGreyScale = 1;
+
+			var (lowest, highest) = GetLowestAndHighestValue(matrix);
 
 			float oldRange = highest - lowest;
 			float newRange = maxGreyscale - minGreyScale;
